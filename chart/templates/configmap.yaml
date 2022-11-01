@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  namespace: {{ .Release.Namespace | quote }}
+  name: {{ include "common.fullname" . }}
+  labels:
+    {{- include "common.labels" . | nindent 4 }}
+
+  {{- with .Values.common.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+data:
+  DJANGO_SETTINGS_MODULE: "config.settings.production"
+  DJANGO_ADMIN_URL: "admin/"
+
+  # TODO: Insecure but temporarily set for K8s deployment testing until get ready for TLS
+  DJANGO_ALLOWED_HOSTS: "*"
+  DJANGO_SECURE_SSL_REDIRECT: "False"
+
+  MAILGUN_DOMAIN: ""
+
+  {{- with .Values.app.config.crawlerURL }}
+  CRAWLER_URL: {{ tpl . $ }}
+  {{- end }}

@@ -1,0 +1,67 @@
+exclude: ".git|.devcontainer|.vscode|idl|migrations"
+default_stages: [commit]
+fail_fast: true
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.3.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+        exclude: ^chart/templates
+      - id: check-toml
+
+  - repo: https://github.com/sirosen/check-jsonschema
+    rev: 0.18.3
+    hooks:
+      - id: check-jsonschema
+        files: chart/values.yaml
+        args: ["--schemafile", "./chart/values.schema.json"]
+
+  - repo: local
+    hooks:
+      - id: black
+        name: Format with Black
+        language: system
+        types: [python]
+        entry: poetry run black
+
+      - id: isort
+        name: Format with isort
+        language: system
+        types: [python]
+        entry: poetry run isort
+
+      - id: flake8
+        name: Lint with Flake8
+        language: system
+        types: [python]
+        entry: poetry run flake8
+
+      - id: pydocstyle
+        name: Lint with pydocstyle
+        language: system
+        types: [python]
+        entry: poetry run pydocstyle
+
+      - id: mypy
+        name: Type check with Mypy
+        language: system
+        types: [python]
+        entry: poetry run mypy
+        args: [--show-error-codes, --pretty]
+
+      - id: django-migration
+        name: Check migrations created for model changes
+        language: system
+        types: [python]
+        pass_filenames: false
+        entry: poetry run python manage.py makemigrations
+        args: [--check, --dry-run]
+
+      - id: pytest
+        name: Test with pytest
+        language: system
+        types: [python]
+        pass_filenames: false
+        entry: poetry run pytest

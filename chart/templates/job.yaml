@@ -1,0 +1,102 @@
+{{- with .Values.app.components.server }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  namespace: {{ $.Release.Namespace | quote }}
+  name: {{ include "app.components.server.fullname" $ }}-run-db-migration
+  labels:
+    {{- include "app.components.server.labels" $ | nindent 4 }}
+
+  {{- with $.Values.common.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  template:
+    metadata:
+      labels:
+        {{- include "app.components.server.labels" $ | nindent 8 }}
+
+      {{- with .annotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    spec:
+      serviceAccountName: {{ include "common.serviceAccount.name" $ }}
+      automountServiceAccountToken: {{ default false .automountServiceAccountToken }}
+      {{- with (default $.Values.global.imagePullSecrets $.Values.imagePullSecrets) }}
+      imagePullSecrets:
+        {{- range . }}
+        - name: {{ . }}
+        {{- end }}
+      {{- end }}
+      {{- with .securityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: migrate
+          image: {{ include "app.image" $ }}
+          imagePullPolicy: {{ $.Values.app.image.pullPolicy }}
+          {{- with .container.securityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: secret
+              mountPath: /etc/app
+              readOnly: true
+          envFrom:
+            - configMapRef:
+                name: {{ include "common.fullname" $ }}
+          env:
+            {{- $mountKeys := list "DJANGO_SECRET_KEY" "DATABASE_URL" "CACHE_URL" "MESSAGE_BROKER_URL" "MAILGUN_API_KEY" -}}
+            {{- range $mountKeys }}
+            - name: "{{ . }}_FILE"
+              value: "/etc/app/{{ . }}"
+            {{- end }}
+          command: ["/bin/sh", "-c", "poetry run python manage.py migrate"]
+          readinessProbe:
+            initialDelaySeconds: 5
+            periodSeconds: 15
+            failureThreshold: 10
+            exec:
+              command:
+                - /bin/sh
+                - -c
+                - |
+                  poetry run python << EOF
+                  import os
+                  import sys
+                  import psycopg2
+
+                  try:
+                    conn = psycopg2.connect(os.environ.get("DATABASE_URL"))
+                    conn.close()
+                    sys.exit(0)
+                  except:
+                    sys.exit(1)
+                  EOF
+          {{- with .container.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+      volumes:
+        - name: secret
+          secret:
+            secretName: {{ include "common.fullname" $ }}
+      {{- with .nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+
+      restartPolicy: OnFailure
+  {{- end }}

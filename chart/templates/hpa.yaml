@@ -1,0 +1,71 @@
+{{- with .Values.app.components.server }}
+{{- if .autoscaling.enabled }}
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  namespace: {{ $.Release.Namespace | quote }}
+  name: {{ include "app.components.server.fullname" $ }}
+  labels:
+    {{- include "app.components.server.labels" . | nindent 4 }}
+
+  {{- with .Values.common.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ include "app.components.server.fullname" $ }}
+  minReplicas: {{ .autoscaling.min }}
+  maxReplicas: {{ .autoscaling.max }}
+  {{- with .autoscaling.metrics }}
+  metrics:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with .autoscaling.behavior }}
+  behavior:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+{{- with .autoscaling.status }}
+status:
+  {{- toYaml . | nindent 2 }}
+{{- end }}
+{{- end }}
+{{- end }}
+---
+{{- with .Values.app.components.worker }}
+{{- if .autoscaling.enabled }}
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  namespace: {{ $.Release.Namespace | quote }}
+  name: {{ include "app.components.worker.fullname" $ }}
+  labels:
+    {{- include "app.components.worker.fullname" . | nindent 4 }}
+
+  {{- with .Values.common.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ include "app.components.worker.fullname" $ }}
+  minReplicas: {{ .autoscaling.min }}
+  maxReplicas: {{ .autoscaling.max }}
+  {{- with .autoscaling.metrics }}
+  metrics:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with .autoscaling.behavior }}
+  behavior:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+{{- with .autoscaling.status }}
+status:
+  {{- toYaml . | nindent 2 }}
+{{- end }}
+{{- end }}
+{{- end }}

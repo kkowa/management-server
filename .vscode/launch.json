@@ -1,0 +1,18 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Django: Run ASGI Server",
+      "type": "python",
+      "request": "launch",
+      "module": "uvicorn",
+      "args": [
+        "config.asgi:application",
+        "--reload",
+        "--log-level",
+        "debug",
+      ],
+      "django": true
+    }
+  ]
+}

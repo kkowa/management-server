@@ -1,0 +1,44 @@
+{
+  "name": "kkowa/apps/server",
+  "dockerComposeFile": [
+    "../docker-compose.yml",
+    "./override.yml"
+  ],
+  "runServices": [
+    "server",
+    "postgresql",
+    "mailhog",
+    "redis",
+    "celery-worker",
+    "celery-beat",
+    "flower"
+  ],
+  "service": "server",
+  "settings": {
+    "python.defaultInterpreterPath": "/usr/local/bin/python"
+  },
+  "overrideCommand": true,
+  "initializeCommand": "sh ./.devcontainer/initializeCommand.sh",
+  "onCreateCommand": "sh ./.devcontainer/onCreateCommand.sh",
+  "updateContentCommand": "sh ./.devcontainer/updateContentCommand.sh",
+  "postCreateCommand": "sh ./.devcontainer/postCreateCommand.sh",
+  "postStartCommand": "sh ./.devcontainer/postStartCommand.sh",
+  "postAttachCommand": "sh ./.devcontainer/postAttachCommand.sh",
+  "shutdownAction": "stopCompose",
+  "workspaceFolder": "/var/app",
+  "extensions": [
+    "ms-python.python",
+    "ms-python.vscode-pylance",
+    "magicstack.magicpython",
+    "batisteo.vscode-django",
+    "mhutchie.git-graph",
+    "eamodio.gitlens",
+    "ldez.ignore-files",
+    "gruntfuggly.todo-tree",
+    "redhat.vscode-yaml",
+    "tamasfe.even-better-toml",
+    "streetsidesoftware.code-spell-checker",
+    "GitLab.gitlab-workflow",
+    "EditorConfig.EditorConfig"
+  ]
+}

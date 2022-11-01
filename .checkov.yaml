@@ -1,0 +1,4 @@
+skip-check:
+  # CI handles app image digests
+  # https://docs.bridgecrew.io/docs/bc_k8s_39
+  - CKV_K8S_43

@@ -1,0 +1,114 @@
+version: "3"
+
+volumes:
+  pyvenv: {}
+  postgresql-data: {}
+
+services:
+  server:
+    &django
+    image: localhost:5000/kkowa/apps/server:local
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+      target: development
+    depends_on:
+      - postgresql
+      - mailhog
+      - redis
+      - rabbitmq
+    volumes:
+      - .:/var/app:z
+      - pyvenv:/var/app/.venv
+    environment:
+      USE_DOCKER: "yes"
+      IPYTHONDIR: "/var/app/.ipython"
+      DATABASE_URL: "postgres://user:password@postgresql:5432/db"
+      CACHE_URL: "redis://redis:6379/0"
+      MESSAGE_BROKER_URL: "amqp://user:password@rabbitmq:5672/vhost"
+      FLOWER_USER: "user"
+      FLOWER_PASSWORD: "password"
+    ports:
+      - 8000:8000
+    command: poetry run uvicorn config.asgi:application --host 0.0.0.0 --port 8000
+
+  # checkov:skip=CKV_SECRET_4:Seems false-positive warning, and compose used only for local development
+  postgresql:
+    image: postgres:13-alpine
+    volumes:
+      - postgresql-data:/var/lib/postgresql/data:Z
+    environment:
+      POSTGRES_DB: "db"
+      POSTGRES_USER: "user"
+      POSTGRES_PASSWORD: "password"
+    ports:
+      - "5432:5432"
+
+  mailhog:
+    image: mailhog/mailhog:v1.0.0
+    ports:
+      - "1025:1025"
+
+  redis:
+    image: redis:5.0
+    ports:
+      - "6379:6379"
+
+  rabbitmq:
+    image: rabbitmq:3.9.12-management
+    environment:
+      RABBITMQ_DEFAULT_USER: user
+      RABBITMQ_DEFAULT_PASS: password
+      RABBITMQ_DEFAULT_VHOST: vhost
+    ports:
+      - "5672:5672"
+      - "15672:15672" # web admin
+
+  # ==========================================================================
+  # Celery
+  # ==========================================================================
+  celery-worker:
+    <<: *django
+    depends_on:
+      - server
+    ports: []
+    command: start-celery-worker.sh
+    healthcheck:
+      test: poetry run celery inspect ping -d celery@$${HOSTNAME}
+      start_period: 10s
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+    restart: on-failure:5
+
+  celery-beat:
+    <<: *django
+    depends_on:
+      - server
+    ports: []
+    command: start-celery-beat.sh
+    healthcheck:
+      test: "poetry run celery -A config.celery_app status | grep 'celery@.*: OK'"
+      start_period: 10s
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+    restart: on-failure:5
+
+  flower:
+    <<: *django
+    depends_on:
+      - server
+    ports:
+      - "5555:5555"
+    command: start-flower.sh
+    healthcheck:
+      test: curl -fsSL --user "$${FLOWER_USER}:$${FLOWER_PASSWORD}" 'http://localhost:5555/metrics'
+      start_period: 10s
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+    restart: on-failure:5

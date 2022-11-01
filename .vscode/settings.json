@@ -1,0 +1,96 @@
+{
+  "files.eol": "\n",
+  "files.associations": {
+    "**/*.html": "html",
+    "**/templates/**/*.html": "django-html",
+    "**/templates/**/*": "django-txt",
+    "**/requirements{/**,*}.{txt,in}": "pip-requirements",
+    "**/.devcontainer/override.yml": "dockercompose",
+    "**/chart/templates/{**,*}.{yaml,yml,tpl}": "helm",
+    "**/chart/templates/NOTES.txt": "helm",
+    "**/chart/*.yaml": "yaml",
+  },
+  "files.exclude": {
+    ".mypy_cache": true,
+    ".pytest_cache": true,
+    ".venv": true,
+    "**/__pycache__": true
+  },
+  "files.insertFinalNewline": true,
+  "emmet.includeLanguages": {
+    "django-html": "html"
+  },
+  //
+  // Formatting
+  // ------------------------------------------------------------------------
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": true,
+  },
+  "python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python",
+  "python.poetryPath": "poetry",
+  "python.formatting.provider": "black",
+  "python.formatting.blackPath": "${workspaceFolder}/.venv/bin/black",
+  "python.sortImports.path": "${workspaceFolder}/.venv/bin/isort",
+  "yaml.format.enable": true,
+  "yaml.schemas": {
+    "chart/values.schema.json": "chart/values.yaml",
+  },
+  "[helm]": {
+    "editor.formatOnSave": false,
+  },
+  //
+  // Linting
+  // ------------------------------------------------------------------------
+  "python.linting.enabled": true,
+  "python.linting.lintOnSave": true,
+  "python.linting.ignorePatterns": [
+    "**/site-packages/**/*.py",
+    "**/migrations/*.py",
+  ],
+  // flake8
+  "python.linting.flake8Enabled": true,
+  "python.linting.flake8Path": "${workspaceFolder}/.venv/bin/flake8",
+  // pydocstyle
+  "python.linting.pydocstyleEnabled": true,
+  "python.linting.pydocstylePath": "${workspaceFolder}/.venv/bin/pydocstyle",
+  // mypy
+  "python.linting.mypyEnabled": true,
+  "python.linting.mypyPath": "${workspaceFolder}/.venv/bin/mypy",
+  // cspell
+  "cSpell.words": [
+    "asgi",
+    "batisteo",
+    "cobertura",
+    "fastapi",
+    "graphiql",
+    "Gunicorn",
+    "isort",
+    "jsonpath",
+    "jsonschema",
+    "kkowa",
+    "kubernetes",
+    "mailhog",
+    "mypy",
+    "PINENTRY",
+    "psutil",
+    "pydantic",
+    "pylance",
+    "pytest",
+    "rabbitmq",
+    "redoc",
+    "uncategorized",
+    "Uvicorn",
+    "venv"
+  ],
+  //
+  // Testing
+  // -----------------------------------------------------------------------
+  "python.testing.unittestEnabled": false,
+  "python.testing.pytestEnabled": true,
+  "python.testing.pytestPath": "${workspaceFolder}/.venv/bin/pytest",
+  "python.testing.pytestArgs": [
+    "--ignore-unknown-dependency",
+    "--no-cov", // https://code.visualstudio.com/docs/python/testing#_pytest-configuration-settings
+  ],
+}

@@ -1,0 +1,7 @@
+version: "3"
+
+services:
+  server:
+    user: root:root
+    healthcheck:
+      disable: true

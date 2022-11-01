@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: {{ .Release.Namespace | quote }}
+  name: {{ include "app.components.server.fullname" . }}
+  labels:
+    {{- include "app.components.server.labels" . | nindent 4 }}
+
+  {{- with .Values.common.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.service.type }}
+  selector:
+    {{- include "app.components.server.selectorLabels" . | nindent 4 }}
+
+  ports:
+    - protocol: TCP
+      port: {{ .Values.service.port }}
+      targetPort: http

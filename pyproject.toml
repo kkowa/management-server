@@ -1,0 +1,148 @@
+[tool.poetry]
+name = "kkowa-server"
+version = "0.1.0"
+description = "Core application server component of kkowa."
+authors = []
+classifiers = ["Private :: Do not Upload"]
+
+[tool.poetry.dependencies]
+argon2-cffi = "^21"
+celery = "^5"
+channels = "^3"
+Django = "^4.1"
+django-allauth = "^0"
+django-anymail = { version = "^8", extras = ["mailgun"] }
+django-celery-beat = "^2"
+django-celery-results = "^2"
+django-cors-headers = "^3"
+django-crispy-forms = "^1"
+django-environ = "^0"
+django-filter = "^22"
+django-health-check = "^3"
+django-model-utils = "^4"
+django-redis = "^5"
+fastapi = "^0"
+flower = "^1"
+grpcio = "^1"
+grpcio-tools = "^1"
+gunicorn = "^20"
+Pillow = "^9"
+psutil = "^5"
+psycopg2-binary = "^2"
+pydantic = { version = "^1", extras = ["email"] }
+python = "^3.10"
+redis = { version = "^4", extras = ["hiredis"] }
+strawberry-django-plus = "^1"
+strawberry-graphql = "^0"
+strawberry-graphql-django = "^0"
+uvicorn = { version = "^0", extras = ["standard"] }
+whitenoise = "^6"
+
+[tool.poetry.dev-dependencies]
+black = "*"
+coverage = "*"
+django-coverage-plugin = "*"
+django-debug-toolbar = "*"
+django-extensions = "*"
+django-stubs = "*"
+factory-boy = "*"
+Faker = "*"
+flake8 = "*"
+flake8-isort = "*"
+ipdb = "*"
+mypy = "*"
+pre-commit = "*"
+pydocstyle = "*"
+pytest = "*"
+pytest-asyncio = "*"
+pytest-cov = "*"
+pytest-django = "*"
+pytest-socket = "*"
+pytest-sugar = "*"
+pytest-timeout = "*"
+pytest-xdist = { version = "*", extras = ["psutil"] }
+types-protobuf = "*"
+watchgod = "*"
+Werkzeug = "*"
+
+[tool.black]
+target-version = ["py310"]
+line-length = 120
+include = '\.pyi?$'
+exclude = """
+/(
+	| migrations
+    | idl
+    | .venv
+)/
+"""
+
+[tool.mypy]
+python_version = "3.10"
+exclude = "(idl|migrations|.venv)/"
+plugins = ["mypy_django_plugin.main"]
+check_untyped_defs = true
+disallow_untyped_defs = true
+ignore_missing_imports = true
+warn_unused_ignores = true
+warn_redundant_casts = true
+warn_unused_configs = true
+warn_return_any = true
+show_error_codes = true
+
+[[tool.mypy.overrides]]
+module = "migrations.*"
+ignore_errors = true
+
+[tool.django-stubs]
+django_settings_module = "config.settings.test"
+
+[tool.pydocstyle]
+convention = "google"
+add_ignore = ["D100", "D101", "D102", "D104", "D105", "D106", "D402"]
+match_dir = "(?!(migrations|idl|.venv)).*"
+
+[tool.pytest.ini_options]
+pythonpath = [".", "./idl/grpc"]
+addopts = """
+    --numprocesses auto \
+    --strict-markers \
+    --doctest-modules \
+    --ds=config.settings.test \
+    --reuse-db \
+    --cov \
+    --cov-report=term \
+    --cov-report=xml \
+    --show-capture=no \
+    --junitxml=report.xml
+"""
+python_files = ["*_tests.py", "test_*.py"]
+python_classes = ["Test*", "*Tests"]
+python_functions = ["test_*"]
+testpaths = ["src", "tests"]
+markers = [
+    # Test types
+    "unit: Tests isolated from database and external network dependencies.",
+    "integration: Tests with various components. Only localhost services allowed.",
+    "e2e: Fully functional, end to end tests running in perspective of real users",
+    # Test attributes
+    "slow: Tests that takes numerous time to be completed.",
+    "flaky: Tests that is known to be so unstable, ambiguous that cannot expect consistent results.",
+]
+filterwarnings = [
+    "ignore::django.utils.deprecation.RemovedInDjango50Warning",
+    "ignore::DeprecationWarning:kombu",
+    "ignore::DeprecationWarning:channels",
+]
+asyncio_mode = "auto"
+
+[tool.coverage.run]
+include = ["src/*"]
+omit = ["*migrations*", "*tests*"]
+branch = true
+plugins = ["django_coverage_plugin"]
+
+[tool.coverage.report]
+skip_empty = true
+show_missing = true
+exclude_lines = ["pragma: no cover", "if TYPE_CHECKING:"]

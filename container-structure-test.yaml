@@ -1,0 +1,30 @@
+schemaVersion: 2.0.0
+
+commandTests:
+  - name: "Echo"
+    command: "echo"
+    args: ["hello"]
+    expectedOutput: ["hello"]
+
+fileExistenceTests:
+  - name: "Application Directory"
+    path: "/var/app"
+    shouldExist: true
+    uid: 1000
+    gid: 1000
+
+fileContentTests: []
+
+metadataTest:
+  env:
+    - key: "PYTHONPATH"
+      value: "^(.*:)?/var/app/idl/grpc(:.*)?$"
+      isRegex: true
+
+  exposedPorts: ["8000"]
+  entrypoint: ["docker-entrypoint.sh"]
+  cmd: ["start.sh"]
+  workdir: "/var/app"
+  user: "worker:worker"
+
+licenseTests: []
