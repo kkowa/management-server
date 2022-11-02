@@ -2,7 +2,13 @@ name: Build and Push
 
 on:
   push:
-    branches: [migrate-to-github] # TODO: Only for while migrating
+    branches:
+      - main
+    tags:
+      - v*
+  pull_request:
+    branches:
+      - main
 
 jobs:
   build-test-push:
