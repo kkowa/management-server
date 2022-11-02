@@ -6,9 +6,6 @@
     "**/templates/**/*": "django-txt",
     "**/requirements{/**,*}.{txt,in}": "pip-requirements",
     "**/.devcontainer/override.yml": "dockercompose",
-    "**/chart/templates/{**,*}.{yaml,yml,tpl}": "helm",
-    "**/chart/templates/NOTES.txt": "helm",
-    "**/chart/*.yaml": "yaml",
   },
   "files.exclude": {
     ".mypy_cache": true,
@@ -33,9 +30,6 @@
   "python.formatting.blackPath": "${workspaceFolder}/.venv/bin/black",
   "python.sortImports.path": "${workspaceFolder}/.venv/bin/isort",
   "yaml.format.enable": true,
-  "yaml.schemas": {
-    "chart/values.schema.json": "chart/values.yaml",
-  },
   "[helm]": {
     "editor.formatOnSave": false,
   },

@@ -8,15 +8,7 @@ repos:
       - id: trailing-whitespace
       - id: end-of-file-fixer
       - id: check-yaml
-        exclude: ^chart/templates
       - id: check-toml
-
-  - repo: https://github.com/sirosen/check-jsonschema
-    rev: 0.18.3
-    hooks:
-      - id: check-jsonschema
-        files: chart/values.yaml
-        args: ["--schemafile", "./chart/values.schema.json"]
 
   - repo: local
     hooks:
