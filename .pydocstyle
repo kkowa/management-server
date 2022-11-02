@@ -1,0 +1,4 @@
+[pydocstyle]
+convention = google
+add_ignore = D100, D101, D102, D104, D105, D106, D402
+match_dir = (?!(migrations|idl|.venv|_generated)).*

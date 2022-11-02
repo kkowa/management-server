@@ -1,4 +1,4 @@
 [submodule "idl"]
-path = idl
-url = ../idl.git
-branch = main
+	path = idl
+	url = https://github.com/kkowa/idl.git
+	branch = main

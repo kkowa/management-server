@@ -12,21 +12,6 @@ trim_trailing_whitespace = true
 indent_style = space
 indent_size = 4
 
-[*.py]
-line_length = 120
-known_first_party = src,config,idl
-known_django = django
-multi_line_output = 3
-sections = FUTURE,STDLIB,DJANGO,THIRDPARTY,FIRSTPARTY,LOCALFOLDER
-default_section = THIRDPARTY
-recursive = true
-skip = .venv/,idl/
-skip_glob = **/migrations/*.py
-include_trailing_comma = true
-force_grid_wrap = 0
-force_alphabetical_sort_within_sections = true
-use_parentheses = true
-
 [*.{html,css,scss,json,yaml,yml}]
 indent_style = space
 indent_size = 2

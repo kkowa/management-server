@@ -17,6 +17,7 @@ help: Makefile
 # Common
 # =============================================================================
 install:  ## Install the app locally
+	command -v pyenv > /dev/null && pyenv install --skip-existing "$$(pyenv local)"
 	poetry install -vv
 .PHONY: install
 
@@ -27,7 +28,7 @@ init:  ## Initialize project repository
 .PHONY: init
 
 run:  ## Run development server
-	uvicorn config.asgi:application --reload --log-level debug
+	poetry run uvicorn config.asgi:application --reload --log-level debug
 .PHONY: run
 
 

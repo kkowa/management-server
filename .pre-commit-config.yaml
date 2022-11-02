@@ -1,4 +1,10 @@
-exclude: ".git|.devcontainer|.vscode|idl|migrations"
+exclude: |
+  (?x)(
+    ^idl/
+    | ^.*/migrations/
+    | ^_generated/
+  )
+
 default_stages: [commit]
 fail_fast: true
 repos:
@@ -7,16 +13,30 @@ repos:
     hooks:
       - id: trailing-whitespace
       - id: end-of-file-fixer
-      - id: check-yaml
-        exclude: ^chart/templates
-      - id: check-toml
 
-  - repo: https://github.com/sirosen/check-jsonschema
-    rev: 0.18.3
+  # Hooks for generated stubs
+  - repo: local
     hooks:
-      - id: check-jsonschema
-        files: chart/values.yaml
-        args: ["--schemafile", "./chart/values.schema.json"]
+      - id: grpc-generate
+        name: Generate codes for gRPC
+        language: system
+        files: ^idl/grpc/protos/.*$
+        pass_filenames: false
+        entry: poetry run python -m grpc_tools.protoc
+        args:
+          - --proto_path=./idl/grpc/protos
+          - --grpc_python_out=./_generated/grpc
+          - --python_out=./_generated/grpc
+          - --pyi_out=./_generated/grpc
+          - ./idl/grpc/protos/helloworld/*.proto
+
+      - id: django-migration
+        name: Check migrations created for model changes
+        language: system
+        types: [python]
+        pass_filenames: false
+        entry: poetry run python manage.py makemigrations
+        args: [--check, --dry-run]
 
   - repo: local
     hooks:
@@ -50,14 +70,6 @@ repos:
         types: [python]
         entry: poetry run mypy
         args: [--show-error-codes, --pretty]
-
-      - id: django-migration
-        name: Check migrations created for model changes
-        language: system
-        types: [python]
-        pass_filenames: false
-        entry: poetry run python manage.py makemigrations
-        args: [--check, --dry-run]
 
       - id: pytest
         name: Test with pytest

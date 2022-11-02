@@ -18,4 +18,4 @@ class User(relay.Node):
     date_joined: auto
     last_modified: auto
 
-    folders: relay.Connection[src.graphql.schemas.documents.types.Folder] = relay.connection()
+    folders: relay.Connection[src.graphql.schemas.documents.types.Folder] = gql.django.connection()

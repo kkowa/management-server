@@ -5,9 +5,9 @@ volumes:
   postgresql-data: {}
 
 services:
-  server:
+  app:
     &django
-    image: localhost:5000/kkowa/apps/server:local
+    image: localhost:5000/kkowa/server:local
     build:
       context: .
       dockerfile: ./Dockerfile
@@ -44,11 +44,6 @@ services:
     ports:
       - "5432:5432"
 
-  mailhog:
-    image: mailhog/mailhog:v1.0.0
-    ports:
-      - "1025:1025"
-
   redis:
     image: redis:5.0
     ports:
@@ -64,13 +59,18 @@ services:
       - "5672:5672"
       - "15672:15672" # web admin
 
+  mailhog:
+    image: mailhog/mailhog:v1.0.0
+    ports:
+      - "1025:1025"
+
   # ==========================================================================
   # Celery
   # ==========================================================================
   celery-worker:
     <<: *django
     depends_on:
-      - server
+      - app
     ports: []
     command: start-celery-worker.sh
     healthcheck:
@@ -85,7 +85,7 @@ services:
   celery-beat:
     <<: *django
     depends_on:
-      - server
+      - app
     ports: []
     command: start-celery-beat.sh
     healthcheck:
@@ -100,7 +100,7 @@ services:
   flower:
     <<: *django
     depends_on:
-      - server
+      - app
     ports:
       - "5555:5555"
     command: start-flower.sh

@@ -18,7 +18,7 @@ class Folder(relay.Node):
     created: auto
     last_modified: auto
 
-    documents: relay.Connection[Document] = relay.connection()
+    documents: relay.Connection[Document] = gql.django.connection()
 
 
 @gql.django.type(model=models.Document)

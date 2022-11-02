@@ -1,76 +1,61 @@
-# kkowa/apps/server
+# kkowa/server
 
-Core application server component of kkowa.
+Core application server component of kkowa. Currently this project has no name.
 
 ## 🧰 Tech Stack
 
 - **Language** Python 3
-- **Framework** [Django](https://www.djangoproject.com/)
-- **Source Control** Git and GitLab
-- **CI·CD** GitLab CI
+
+- **Framework** [Django 4](https://www.djangoproject.com/)
+
+- **CI·CD** GitHub Actions
 
 ## ⚙️ Getting Started
 
-This section describes how to set your local environments up.
+This section describes how to set your local development environments up.
 
-### Setup
+### **(A)** Developing Inside Container
 
-Followings are **required**.
+Requirement:
 
 - [Docker](https://www.docker.com/)
 
-  To configure other dependent services like database, we use Docker (mainly [**Docker Compose**](https://docs.docker.com/compose/)).
+  To configure other dependent services like database, we use Docker (mainly [Docker Compose](https://docs.docker.com/compose/)).
 
-- **(A)** Developing With Development Container
+- [Visual Studio Code](https://code.visualstudio.com/)
 
-  - [Visual Studio Code](https://code.visualstudio.com/)
+  VS Code Development Container provides rich features such as git and GnuPG configuration forwarding. But they sometimes require you to install some tools based on your device. Please check [this](https://code.visualstudio.com/docs/remote/containers#_sharing-git-credentials-with-your-container).
 
-    Basically VS Code Development Container provides rich features such as git configuration and GPG sharing. But they sometimes require you to install some tools based on your device. Please check [this](https://code.visualstudio.com/docs/remote/containers#_sharing-git-credentials-with-your-container).
+As container itself configured to include all required tools, there's no extra tools required.
 
-- **(B)** Developing Locally
-
-  - [Poetry](https://python-poetry.org/)
-
-After you installed all above, then follow next steps based on your choice (A, B):
-
-#### **(A)** Developing With Development Container
-
-We configured all basic tools to be installed inside devcontainer, such as **Poetry**.
-
-1. Install VS Code extension **Remote - Containers (by Microsoft)**.
+1. Install VS Code extension [Dev Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers).
 
 1. Then, clone this repository and open in VS Code, select **Remote-Containers: Reopen in Container...** at command palette (<kbd>ctrl</kbd> + <kbd>shift</kbd> + <kbd>P</kbd> or <kbd>cmd</kbd> + <kbd>shift</kbd> + <kbd>P</kbd>).
 
-1. Done. Container includes required tools such as **pre-commit**, so you are ready to code.
+1. Done.
 
-#### **(B)** Developing Locally
+### **(B)** Developing Locally
+
+Requirement:
+
+- [Poetry](https://python-poetry.org/)
+
+- [pre-commit](https://pre-commit.com/)
+
+Not essential, but recommended:
+
+- [pyenv](https://github.com/pyenv/pyenv)
+
+Follow next for local development setup:
 
 1. Run `make install`
 
 1. Run `make init`
 
-1. Done. all other configurations are on your own. Or, you can use existing docker compose file to create dependent services (but would require some configuration changes).
+1. Done. all other configurations such as managing environment variables, setting up databases are on your own. You can use existing docker compose configuration to manage them (but it would require some configuration changes).
 
-### 💯 pre-commit
-
-We are using [pre-commit](https://pre-commit.com/) to check common lint errors and for code formatting. Basically you don't need to anything to install it because it is already listed in project's package dependencies.
-
-What you have to do is just run `pre-commit install` (or `make init`)
-
-### 🐋 Docker Compose
-
-You can see composed environment at [docker-compose.yml](./docker-compose.yml) file. To say shortly, exposed services would be:
-
-- **django** at port **8000**
-
-- **mailhog** at port **8025**
-
-- **flower** **5555**
-
-You could access to web UI via browsers. If are using Docker based on VM (like **Docker ToolBox**), localhost won't work for you. Follow [this](https://stackoverflow.com/a/42886035).
+> ❗ **NOTE** .env files aren't automatically read. Consider using related [plugin](https://github.com/mpeteuil/poetry-dotenv-plugin).
 
 ### ⌨️ Basic Commands
 
-Commands of Django, please check [official document](https://docs.djangoproject.com/en/3.2/ref/django-admin/).
-
-Convenience scripts are defined in [Makefile](./Makefile) at project root. `make` without arguments will show you possible commands.
+Commands repeatedly used are defined in [Makefile](./Makefile). Just type `make` without arguments will show you possible commands.

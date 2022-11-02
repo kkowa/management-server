@@ -30,7 +30,7 @@ Pillow = "^9"
 psutil = "^5"
 psycopg2-binary = "^2"
 pydantic = { version = "^1", extras = ["email"] }
-python = "^3.10"
+python = "^3.11"
 redis = { version = "^4", extras = ["hiredis"] }
 strawberry-django-plus = "^1"
 strawberry-graphql = "^0"
@@ -64,6 +64,7 @@ pytest-xdist = { version = "*", extras = ["psutil"] }
 types-protobuf = "*"
 watchgod = "*"
 Werkzeug = "*"
+py = "*"                                              # https://github.com/Teemu/pytest-sugar/issues/241
 
 [tool.black]
 target-version = ["py310"]
@@ -71,78 +72,9 @@ line-length = 120
 include = '\.pyi?$'
 exclude = """
 /(
-	| migrations
-    | idl
-    | .venv
+  | migrations
+  | idl
+  | .venv
+  | _generated
 )/
 """
-
-[tool.mypy]
-python_version = "3.10"
-exclude = "(idl|migrations|.venv)/"
-plugins = ["mypy_django_plugin.main"]
-check_untyped_defs = true
-disallow_untyped_defs = true
-ignore_missing_imports = true
-warn_unused_ignores = true
-warn_redundant_casts = true
-warn_unused_configs = true
-warn_return_any = true
-show_error_codes = true
-
-[[tool.mypy.overrides]]
-module = "migrations.*"
-ignore_errors = true
-
-[tool.django-stubs]
-django_settings_module = "config.settings.test"
-
-[tool.pydocstyle]
-convention = "google"
-add_ignore = ["D100", "D101", "D102", "D104", "D105", "D106", "D402"]
-match_dir = "(?!(migrations|idl|.venv)).*"
-
-[tool.pytest.ini_options]
-pythonpath = [".", "./idl/grpc"]
-addopts = """
-    --numprocesses auto \
-    --strict-markers \
-    --doctest-modules \
-    --ds=config.settings.test \
-    --reuse-db \
-    --cov \
-    --cov-report=term \
-    --cov-report=xml \
-    --show-capture=no \
-    --junitxml=report.xml
-"""
-python_files = ["*_tests.py", "test_*.py"]
-python_classes = ["Test*", "*Tests"]
-python_functions = ["test_*"]
-testpaths = ["src", "tests"]
-markers = [
-    # Test types
-    "unit: Tests isolated from database and external network dependencies.",
-    "integration: Tests with various components. Only localhost services allowed.",
-    "e2e: Fully functional, end to end tests running in perspective of real users",
-    # Test attributes
-    "slow: Tests that takes numerous time to be completed.",
-    "flaky: Tests that is known to be so unstable, ambiguous that cannot expect consistent results.",
-]
-filterwarnings = [
-    "ignore::django.utils.deprecation.RemovedInDjango50Warning",
-    "ignore::DeprecationWarning:kombu",
-    "ignore::DeprecationWarning:channels",
-]
-asyncio_mode = "auto"
-
-[tool.coverage.run]
-include = ["src/*"]
-omit = ["*migrations*", "*tests*"]
-branch = true
-plugins = ["django_coverage_plugin"]
-
-[tool.coverage.report]
-skip_empty = true
-show_missing = true
-exclude_lines = ["pragma: no cover", "if TYPE_CHECKING:"]
