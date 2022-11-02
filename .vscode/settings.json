@@ -6,6 +6,7 @@
     "**/templates/**/*": "django-txt",
     "**/requirements{/**,*}.{txt,in}": "pip-requirements",
     "**/.devcontainer/override.yml": "dockercompose",
+    "{.coveragerc,.flake8,.pydocstyle}": "ini",
   },
   "files.exclude": {
     ".mypy_cache": true,
