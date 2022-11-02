@@ -37,6 +37,18 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Prepare images
+        uses: docker/bake-action@v2
+        with:
+          targets: |
+            build
+            development
+          set: |
+            *.cache-from=type=gha
+            *.cache-to=type=gha
+          load: true
+          push: false
+
       - name: Run checks
         run: docker compose run -it --rm --user root app -- make ci
 
