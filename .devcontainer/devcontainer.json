@@ -1,19 +1,13 @@
 {
-  "name": "kkowa/apps/server",
+  "name": "kkowa/server",
   "dockerComposeFile": [
     "../docker-compose.yml",
     "./override.yml"
   ],
   "runServices": [
-    "server",
-    "postgresql",
-    "mailhog",
-    "redis",
-    "celery-worker",
-    "celery-beat",
-    "flower"
+    "app"
   ],
-  "service": "server",
+  "service": "app",
   "settings": {
     "python.defaultInterpreterPath": "/usr/local/bin/python"
   },
