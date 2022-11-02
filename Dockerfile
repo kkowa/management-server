@@ -51,7 +51,7 @@ ENV PYTHONUNBUFFERED="1"
 ENV PYTHONDONTWRITEBYTECODE="1"
 
 # Add gRPC stub path for imports
-ENV PYTHONPATH="${APP_HOME}/idl/grpc:${PYTHONPATH}"
+ENV PYTHONPATH="${APP_HOME}/_generated/grpc:${PYTHONPATH}"
 
 SHELL ["/bin/bash", "-c"]
 

@@ -1,6 +1,6 @@
 import grpc
 
-from idl.grpc.helloworld import helloworld_pb2, helloworld_pb2_grpc
+from _generated.grpc.helloworld import helloworld_pb2, helloworld_pb2_grpc
 
 
 class Greeter:

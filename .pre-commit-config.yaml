@@ -12,6 +12,19 @@ repos:
 
   - repo: local
     hooks:
+      - id: grpc-generate
+        name: Generate codes for gRPC
+        language: system
+        files: ^idl/grpc/protos/.*$
+        pass_filenames: false
+        entry: poetry run python -m grpc_tools.protoc
+        args:
+          - --proto_path=./idl/grpc/protos
+          - --grpc_python_out=./_generated/grpc
+          - --python_out=./_generated/grpc
+          - --pyi_out=./_generated/grpc
+          - ./idl/grpc/protos/helloworld/*.proto
+
       - id: black
         name: Format with Black
         language: system

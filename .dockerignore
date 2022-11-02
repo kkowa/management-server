@@ -1,10 +1,10 @@
 **
 
 # Allowed things
+!_generated/**
 !config/**
-!idl/grpc/helloworld/*.py
-!scripts/**
 !locale/**
+!scripts/**
 !src/**
 !static/**
 !manage.py
