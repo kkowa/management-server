@@ -13,9 +13,9 @@ ARG POETRY_VERSION
 ARG APP_HOME
 
 # Core deps
-RUN apt-get update && apt-get install --no-install-recommends -y \
+RUN apt update && apt install --no-install-recommends -y \
     build-essential \
-    && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
+    && apt purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
     && rm -rf /var/lib/apt/lists/*
 
 RUN pip install --no-cache-dir "poetry==${POETRY_VERSION}"
@@ -56,9 +56,9 @@ ENV PYTHONPATH="${APP_HOME}/_generated/grpc:${PYTHONPATH}"
 SHELL ["/bin/bash", "-c"]
 
 # Core deps
-RUN apt-get update && apt-get install --no-install-recommends -y \
+RUN apt update && apt install --no-install-recommends -y \
     curl \
-    && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
+    && apt purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
     && rm -rf /var/lib/apt/lists/*
 
 RUN pip install --no-cache-dir "poetry==${POETRY_VERSION}"
@@ -89,23 +89,20 @@ ARG APP_HOME
 VOLUME ["${APP_HOME}/.venv"]
 
 # Install dev-only utilities
-RUN apt-get update && apt-get install --no-install-recommends -y \
+RUN apt update && apt install --no-install-recommends -y \
     gettext \
     git \
     gnupg2 \
     libpq-dev \
     make \
-    && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
+    && apt purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
     && rm -rf /var/lib/apt/lists/*
 
 # Install python deps
 COPY --from=build --chown=worker:worker ${APP_HOME}/.venv ${APP_HOME}/.venv
 
-# Copy script files implicitly
-COPY --chown=worker:worker --chmod=755 \
-    ./scripts/docker-entrypoint.sh ./scripts/start-celery-beat.sh \
-    ./scripts/start-celery-worker.sh ./scripts/start-flower.sh ./scripts/start.sh \
-    /usr/local/bin/
+# Copy script files to executable path
+COPY --chown=worker:worker --chmod=755 ./scripts/* /usr/local/bin/
 
 # Copy source codes
 COPY --chown=worker:worker . .
@@ -120,11 +117,8 @@ FROM base AS production
 # Install python deps
 COPY --from=build-minimal --chown=worker:worker ${APP_HOME}/.venv ${APP_HOME}/.venv
 
-# Copy script files implicitly
-COPY --chown=worker:worker --chmod=755 \
-    ./scripts/docker-entrypoint.sh ./scripts/start-celery-beat.sh \
-    ./scripts/start-celery-worker.sh ./scripts/start-flower.sh ./scripts/start.sh \
-    /usr/local/bin/
+# Copy script files to executable path
+COPY --chown=worker:worker --chmod=755 ./scripts/* /usr/local/bin/
 
 # Copy source codes
 COPY --chown=worker:worker . .
