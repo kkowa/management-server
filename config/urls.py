@@ -15,9 +15,7 @@ urlpatterns = [
     path("ht/", include("health_check.urls")),
     # User management
     path("accounts/", include("allauth.urls")),
-] + static(
-    settings.MEDIA_URL, document_root=settings.MEDIA_ROOT
-)  # type: ignore[operator]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:
     # Static file serving when using Gunicorn + Uvicorn for local web socket development
@@ -46,6 +44,6 @@ if settings.DEBUG:
     if "debug_toolbar" in settings.INSTALLED_APPS:
         import debug_toolbar
 
-        urlpatterns = [  # type: ignore[assignment]
+        urlpatterns = [
             path("__debug__/", include(debug_toolbar.urls)),
-        ] + urlpatterns  # type: ignore[operator]
+        ] + urlpatterns

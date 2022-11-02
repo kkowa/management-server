@@ -2,8 +2,6 @@ from django.db import models, transaction
 from django.db.models.fields.json import JSONField
 from django.utils.translation import gettext_lazy as _
 
-from pydantic import validate_arguments
-
 from src.apps.common.managers import Manager
 from src.apps.common.models import Model
 from src.apps.users.models import User
@@ -13,7 +11,6 @@ from .folder import Folder
 
 
 class DocumentManager(Manager["Document"]):
-    @validate_arguments(config=dict(arbitrary_types_allowed=True))
     def create_documents_with_folders(
         self, owner: User, input: list[datamodels.CreateDocumentInput]
     ) -> list["Document"]:

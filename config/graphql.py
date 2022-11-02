@@ -33,9 +33,9 @@ from src.graphql.schemas.documents.subscriptions import document_created
 from src.graphql.schemas.users.queries import user_self
 
 # Gather all operations to apply patches
-queries = [user_self, folders, documents]
-mutations = [create_documents]
-subscriptions = [document_created]
+queries: list[StrawberryField] = [user_self, folders, documents]
+mutations: list[StrawberryField] = [create_documents]
+subscriptions: list[StrawberryField] = [document_created]  # type: ignore[list-item]
 
 # Patch permissions to all operations
 # NOTE: Strawberry currently uses old GraphiQL that does not supports header editor. It is WIP feature but until then,
