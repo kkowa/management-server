@@ -1,8 +1,8 @@
 # =============================================================================
 # Core: Build
 # =============================================================================
-ARG PYTHON_VERSION="3.10"
-ARG POETRY_VERSION="1.2.0b3"
+ARG PYTHON_VERSION="3.11"
+ARG POETRY_VERSION="1.2.2"
 
 # Application directory
 ARG APP_HOME="/var/app"
