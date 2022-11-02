@@ -11,6 +11,19 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: ghcr.io/${{ github.repository }}
+          tags: |
+            type=sha
+            type=ref,event=branch
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=semver,pattern={{major}}.{{minor}}.{{patch}}
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
 
@@ -30,14 +43,10 @@ jobs:
       - name: Build app image
         uses: docker/build-push-action@v3
         with:
-          push: true
-          images: ghcr.io/${{ github.repository }}
-          tags: |
-            type=sha
-            type=ref,event=branch
-            type=semver,pattern={{version}}
-            type=semver,pattern={{major}}
-            type=semver,pattern={{major}}.{{minor}}
-            type=semver,pattern={{major}}.{{minor}}.{{patch}}
-
+          context: .
           target: production
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          push: ${{ github.event_name != 'pull_request' }}
