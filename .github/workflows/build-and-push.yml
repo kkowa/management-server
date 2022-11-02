@@ -25,7 +25,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Run checks
-        run: docker compose run -it --rm app -- make ci
+        run: docker compose run -it --rm --user root app -- make ci
 
       - name: Build app image
         uses: docker/build-push-action@v3
