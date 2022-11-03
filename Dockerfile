@@ -8,6 +8,8 @@ ARG APP_HOME="/var/app"
 
 FROM python:${PYTHON_VERSION}-slim-bullseye AS build
 
+ARG APP_HOME
+
 # Core deps
 RUN apt update && apt install --no-install-recommends -y \
     build-essential \
@@ -16,7 +18,8 @@ RUN apt update && apt install --no-install-recommends -y \
 
 RUN pip install --no-cache-dir poetry
 
-WORKDIR /tmp/build
+# NOTE: Generated venv should have same path for later stage to use it properly, otherwise interpreter path would break
+WORKDIR "${APP_HOME}"
 
 COPY poetry.lock poetry.toml pyproject.toml ./
 
@@ -93,7 +96,7 @@ RUN apt update && apt install --no-install-recommends -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Install python deps
-COPY --from=build --chown=worker:worker /tmp/build/.venv "${APP_HOME}/.venv"
+COPY --from=build --chown=worker:worker "${APP_HOME}/.venv" "${APP_HOME}/.venv"
 
 # Copy script files to executable path
 COPY --chown=worker:worker --chmod=755 ./scripts/* /usr/local/bin/
@@ -109,7 +112,7 @@ USER worker:worker
 FROM base AS production
 
 # Install python deps
-COPY --from=build-minimal --chown=worker:worker /tmp/build/.venv "${APP_HOME}/.venv"
+COPY --from=build-minimal --chown=worker:worker "${APP_HOME}/.venv" "${APP_HOME}/.venv"
 
 # Copy script files to executable path
 COPY --chown=worker:worker --chmod=755 ./scripts/* /usr/local/bin/
