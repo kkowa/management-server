@@ -6,9 +6,17 @@ on:
       - main
     tags:
       - v*
+    paths-ignore:
+      - ".devcontainer/**"
+      - ".vscode/**"
+      - "**.md"
   pull_request:
     branches:
       - main
+    paths-ignore:
+      - ".devcontainer/**"
+      - ".vscode/**"
+      - "**.md"
 
 jobs:
   build-test-push:
