@@ -2,15 +2,11 @@
 # Core: Build
 # =============================================================================
 ARG PYTHON_VERSION="3.11"
-ARG POETRY_VERSION="1.2.2"
 
 # Application directory
 ARG APP_HOME="/var/app"
 
 FROM python:${PYTHON_VERSION}-slim-bullseye AS build
-
-ARG POETRY_VERSION
-ARG APP_HOME
 
 # Core deps
 RUN apt update && apt install --no-install-recommends -y \
@@ -18,9 +14,9 @@ RUN apt update && apt install --no-install-recommends -y \
     && apt purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
     && rm -rf /var/lib/apt/lists/*
 
-RUN pip install --no-cache-dir "poetry==${POETRY_VERSION}"
+RUN pip install --no-cache-dir poetry
 
-WORKDIR ${APP_HOME}
+WORKDIR /tmp/build
 
 COPY poetry.lock poetry.toml pyproject.toml ./
 
@@ -28,7 +24,6 @@ COPY poetry.lock poetry.toml pyproject.toml ./
 RUN poetry install --verbose --no-ansi --no-interaction --no-root --sync --with dev
 
 # Extra processing stage to remove non-default dependencies
-# TODO: Caching maybe effective
 FROM build AS build-minimal
 
 # Uninstall non-main dependencies
@@ -39,7 +34,6 @@ RUN poetry install --verbose --no-ansi --no-interaction --no-root --sync --only 
 # =============================================================================
 FROM python:${PYTHON_VERSION}-slim-bullseye AS base
 
-ARG POETRY_VERSION
 ARG APP_HOME
 
 # App user (worker) for manual UID and GID set
@@ -61,15 +55,15 @@ RUN apt update && apt install --no-install-recommends -y \
     && apt purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
     && rm -rf /var/lib/apt/lists/*
 
-RUN pip install --no-cache-dir "poetry==${POETRY_VERSION}"
+RUN pip install --no-cache-dir poetry
 
 # Change working directory
-WORKDIR ${APP_HOME}
+WORKDIR "${APP_HOME}"
 
 # Create app user and set as app owner
-RUN groupadd --gid ${GID} worker \
-    && useradd  --system --uid ${UID} --gid ${GID} --create-home worker \
-    && chown -R worker:worker ${APP_HOME}
+RUN groupadd --gid "${GID}" worker \
+    && useradd  --system --uid "${UID}" --gid "${GID}" --create-home worker \
+    && chown -R worker:worker "${APP_HOME}"
 
 EXPOSE 8000
 
@@ -99,7 +93,7 @@ RUN apt update && apt install --no-install-recommends -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Install python deps
-COPY --from=build --chown=worker:worker ${APP_HOME}/.venv ${APP_HOME}/.venv
+COPY --from=build --chown=worker:worker /tmp/build/.venv "${APP_HOME}/.venv"
 
 # Copy script files to executable path
 COPY --chown=worker:worker --chmod=755 ./scripts/* /usr/local/bin/
@@ -115,7 +109,7 @@ USER worker:worker
 FROM base AS production
 
 # Install python deps
-COPY --from=build-minimal --chown=worker:worker ${APP_HOME}/.venv ${APP_HOME}/.venv
+COPY --from=build-minimal --chown=worker:worker /tmp/build/.venv "${APP_HOME}/.venv"
 
 # Copy script files to executable path
 COPY --chown=worker:worker --chmod=755 ./scripts/* /usr/local/bin/
