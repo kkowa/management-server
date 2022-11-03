@@ -4,7 +4,6 @@ exclude: |
     | ^.*/migrations/
     | ^_generated/
   )
-
 default_stages: [commit]
 fail_fast: true
 repos:
@@ -14,21 +13,17 @@ repos:
       - id: trailing-whitespace
       - id: end-of-file-fixer
 
-  # Hooks for generated stubs
   - repo: local
     hooks:
-      - id: grpc-generate
-        name: Generate codes for gRPC
+      - id: generate
+        name: Generate codes from schemas
         language: system
-        files: ^idl/grpc/protos/.*$
+        files: |
+          (?x)(
+            ^idl/grpc/protos/.*$
+          )
         pass_filenames: false
-        entry: poetry run python -m grpc_tools.protoc
-        args:
-          - --proto_path=./idl/grpc/protos
-          - --grpc_python_out=./_generated/grpc
-          - --python_out=./_generated/grpc
-          - --pyi_out=./_generated/grpc
-          - ./idl/grpc/protos/helloworld/*.proto
+        entry: make generate
 
       - id: django-migration
         name: Check migrations created for model changes

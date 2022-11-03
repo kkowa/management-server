@@ -38,6 +38,16 @@ run:  ## Run development server
 ci: lint test scan  ## Run CI tasks
 .PHONY: ci
 
+generate:  ## Generate codes from schemas
+	mkdir -p _generated/grpc
+	poetry run python -m grpc_tools.protoc \
+		--proto_path=idl/grpc/protos \
+		--grpc_python_out=_generated/grpc \
+		--python_out=_generated/grpc \
+		--pyi_out=_generated/grpc \
+		idl/grpc/protos/helloworld/*.proto
+.PHONY: generate
+
 format:  ## Run autoformatters
 	poetry run black .
 	poetry run isort .
