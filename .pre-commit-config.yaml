@@ -18,10 +18,7 @@ repos:
       - id: generate
         name: Generate codes from schemas
         language: system
-        files: |
-          (?x)(
-            ^idl/grpc/protos/.*$
-          )
+        types: [directory]
         pass_filenames: false
         entry: make generate
 
