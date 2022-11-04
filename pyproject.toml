@@ -8,7 +8,7 @@ classifiers = ["Private :: Do not Upload"]
 [tool.poetry.dependencies]
 argon2-cffi = "^21"
 celery = "^5"
-channels = "^3"
+channels = "^4"
 Django = "^4.1"
 django-allauth = "^0"
 django-anymail = { version = "^8", extras = ["mailgun"] }
