@@ -24,7 +24,7 @@ ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS", default=["*"])
 TIME_ZONE = "Asia/Seoul"
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#language-code
-LANGUAGE_CODE = "ko-KR"
+LANGUAGE_CODE = "en-US"
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#site-id
 SITE_ID = 1
@@ -292,6 +292,9 @@ THIRD_PARTY_APPS = [
     "health_check.contrib.psutil",
     "health_check.contrib.rabbitmq",
     "health_check.contrib.redis",
+    # Strawberry
+    "strawberry.django",
+    "strawberry_django_plus",
     # ------------------------------------------------------------------------
     # Celery
     # ------------------------------------------------------------------------
@@ -461,3 +464,12 @@ HEALTH_CHECK = {
 
 REDIS_URL = CACHE_URL
 BROKER_URL = MESSAGE_BROKER_URL
+
+
+# Strawberry
+# ===================================================================================================================
+# https://strawberry-graphql.github.io/strawberry-graphql-django/
+STRAWBERRY_DJANGO = {
+    "FIELD_DESCRIPTION_FROM_HELP_TEXT": True,
+    "TYPE_DESCRIPTION_FROM_MODEL_DOCSTRING": True,
+}

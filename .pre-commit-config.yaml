@@ -72,3 +72,12 @@ repos:
         types: [python]
         pass_filenames: false
         entry: poetry run pytest
+
+  - repo: local
+    hooks:
+      - id: schema-export
+        name: Generate service schemas
+        language: system
+        types: [python]
+        pass_filenames: false
+        entry: make schema-export

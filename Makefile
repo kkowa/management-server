@@ -69,6 +69,12 @@ scan:  ## Run all scans
 
 .PHONY: scan
 
+# TODO: Move generation codes to config/{api,graphql}.py, to generate when execute them directly (__main__)
+schema-export:  ## Export service schemas
+	poetry run python manage.py shell -c 'exec("""\nimport json\nfrom config.api import get_api_application\nwith open("idl/openapi/schemas/server.openapi.json", mode="wt", encoding="utf-8") as f:\n    json.dump(get_api_application().openapi_schema, f)\n""")'
+	poetry run python manage.py export_schema config.graphql:schema --path idl/graphql/schemas/server.graphql
+.PHONY: export
+
 
 # =============================================================================
 # Handy Scripts
