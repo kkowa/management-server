@@ -44,7 +44,7 @@ coverage = "*"
 django-coverage-plugin = "*"
 django-debug-toolbar = "*"
 django-extensions = "*"
-django-stubs = "*"
+django-stubs = { version = "*", extras = ["compatible-mypy"] }
 factory-boy = "*"
 Faker = "*"
 flake8 = "*"
@@ -64,7 +64,9 @@ pytest-xdist = { version = "*", extras = ["psutil"] }
 types-protobuf = "*"
 watchgod = "*"
 Werkzeug = "*"
-py = "*"                                              # https://github.com/Teemu/pytest-sugar/issues/241
+
+# https://github.com/Teemu/pytest-sugar/issues/241
+py = "*"
 
 [tool.black]
 target-version = ["py310"]

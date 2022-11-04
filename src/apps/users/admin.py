@@ -22,7 +22,7 @@ class UserAdmin(auth_admin.UserAdmin, ModelAdmin):
     form = forms.UserChangeForm
     add_form = forms.UserCreationForm
 
-    fieldsets = (
+    fieldsets = (  # type: ignore[assignment]
         (
             None,
             {"fields": ("id", "username", "password")},
@@ -53,7 +53,7 @@ class TokenAdmin(ModelAdmin):
 
     # Detail view
     # -----------------------------------------------------------------------------------------------------------------
-    fieldsets = (
+    fieldsets = (  # type: ignore[assignment]
         (
             None,
             {"fields": ("id", "owner", "label")},

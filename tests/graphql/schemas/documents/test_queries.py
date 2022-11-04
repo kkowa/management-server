@@ -64,5 +64,5 @@ class TestDocumentQueries(GraphQLTestBase):
 
         global_ids = [edge["node"]["id"] for edge in data["documents"]["edges"]]
         ids = (self._resolve_global_id(global_id) for global_id in global_ids)
-        qs = (await admin_user.folders.aget()).documents.filter(id__in=ids)  # type: ignore[attr-defined]
+        qs = (await admin_user.folders.aget()).documents.filter(id__in=ids)
         assert await sync_to_async(list)(qs) == documents

@@ -648,7 +648,10 @@ python-versions = ">=3.7"
 [package.dependencies]
 django = "*"
 django-stubs-ext = ">=0.7.0"
-mypy = ">=0.980"
+mypy = [
+    {version = ">=0.980"},
+    {version = ">=0.980,<0.990", optional = true, markers = "extra == \"compatible-mypy\""},
+]
 tomli = "*"
 types-pytz = "*"
 types-PyYAML = "*"
@@ -2154,7 +2157,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.11"
-content-hash = "b06d268c888a46ec4edf1da81ac46470c09218c3b12c25825c308135596b9ac8"
+content-hash = "e9c4ebd247cce79ccc765258549679b9bf749ad16f5280a8063c5b1b18c860c9"
 
 [metadata.files]
 amqp = [

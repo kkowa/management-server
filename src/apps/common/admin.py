@@ -17,9 +17,9 @@ class ModelAdmin(admin.ModelAdmin):
     def get_help_texts(self) -> dict[str, str]:
         """Return help texts."""
         if self.help_texts is None:
-            return DEFAULT_HELP_TEXTS
+            return DEFAULT_HELP_TEXTS  # type: ignore[return-value]
 
-        return DEFAULT_HELP_TEXTS | self.help_texts
+        return DEFAULT_HELP_TEXTS | self.help_texts  # type: ignore[return-value]
 
     def get_form(self, *args: Any, **kwargs: Any) -> Type[forms.ModelForm]:
         """Apply extra features on admin forms."""

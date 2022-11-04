@@ -10,7 +10,7 @@ from . import models
 class FolderAdmin(ModelAdmin):
     readonly_fields = ("id", "count", "created", "last_modified")
     help_texts = {
-        "count": _("Number of documents in folder."),
+        "count": _("Number of documents in folder."),  # type: ignore[dict-item]
     }
 
     # List view
@@ -20,7 +20,7 @@ class FolderAdmin(ModelAdmin):
 
     # Detail view
     # -----------------------------------------------------------------------------------------------------------------
-    fieldsets = (
+    fieldsets = (  # type: ignore[assignment]
         (
             None,
             {"fields": ("id", "owner", "name", "count")},
@@ -42,7 +42,7 @@ class FolderAdmin(ModelAdmin):
 class DocumentAdmin(ModelAdmin):
     readonly_fields = ("id", "type", "created", "last_modified")
     help_texts = {
-        "type": _("JSON type of data."),
+        "type": _("JSON type of data."),  # type: ignore[dict-item]
     }
 
     # List view
@@ -52,7 +52,7 @@ class DocumentAdmin(ModelAdmin):
 
     # Detail view
     # -----------------------------------------------------------------------------------------------------------------
-    fieldsets = (
+    fieldsets = (  # type: ignore[assignment]
         (
             None,
             {"fields": ("id", "folder", "type")},
