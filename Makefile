@@ -28,7 +28,7 @@ init:  ## Initialize project repository
 .PHONY: init
 
 run:  ## Run development server
-	poetry run uvicorn config.asgi:application --reload --log-level debug
+	poetry run uvicorn config.asgi:application --host 0.0.0.0 --reload --log-level debug
 .PHONY: run
 
 
