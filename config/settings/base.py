@@ -1,7 +1,7 @@
 from pathlib import Path
 
 import environ
-from corsheaders.defaults import default_methods
+from corsheaders.defaults import default_headers, default_methods
 
 ROOT_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
 
@@ -451,7 +451,8 @@ SOCIALACCOUNT_ADAPTER = "src.apps.users.adapters.SocialAccountAdapter"
 # https://github.com/adamchainz/django-cors-headers#configuration
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_METHODS = default_methods
-CORS_URLS_REGEX = r"^/(api|graphql)/.*$"
+CORS_ALLOW_HEADERS = default_headers
+CORS_ALLOW_CREDENTIALS = True
 
 
 # django-health-check

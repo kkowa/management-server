@@ -33,7 +33,7 @@ pydantic = { version = "^1", extras = ["email"] }
 python = "^3.11"
 redis = { version = "^4", extras = ["hiredis"] }
 strawberry-django-plus = "^1"
-strawberry-graphql = "^0"
+strawberry-graphql = { version = "^0", extras = ["channels"] }
 strawberry-graphql-django = "^0"
 uvicorn = { version = "^0", extras = ["standard"] }
 whitenoise = "^6"

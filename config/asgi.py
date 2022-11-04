@@ -12,8 +12,10 @@ from pathlib import Path
 from django.core.asgi import get_asgi_application
 from django.urls import re_path
 
+from channels.auth import AuthMiddlewareStack
 from channels.routing import ProtocolTypeRouter, URLRouter
 from channels.security.websocket import AllowedHostsOriginValidator
+from starlette.middleware.cors import CORSMiddleware
 
 # This allows easy placement of apps within the interior src directory.
 ROOT_DIR = Path(__file__).resolve(strict=True).parent.parent
@@ -41,15 +43,26 @@ application = ProtocolTypeRouter(
         "http": URLRouter(
             [
                 re_path("^api", fastapi_application),  # type: ignore[arg-type]
-                re_path("^graphql", GraphQLHTTPConsumer.as_asgi(schema=schema)),
+                re_path(
+                    "^graphql",
+                    CORSMiddleware(  # type: ignore[arg-type]
+                        GraphQLHTTPConsumer.as_asgi(schema=schema),
+                        allow_origins=["*"],
+                        allow_methods=["*"],
+                        allow_headers=["*"],
+                        allow_credentials=True,
+                    ),
+                ),
                 re_path("^", django_application),  # type: ignore[arg-type]
             ]
         ),
         "websocket": AllowedHostsOriginValidator(
-            URLRouter(
-                [
-                    re_path("^graphql", GraphQLWSConsumer.as_asgi(schema=schema)),
-                ],
+            AuthMiddlewareStack(
+                URLRouter(
+                    [
+                        re_path("^graphql", GraphQLWSConsumer.as_asgi(schema=schema)),
+                    ],
+                )
             )
         ),
     }

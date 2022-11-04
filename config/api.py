@@ -17,10 +17,10 @@ def get_api_application(root_prefix: str = "/api") -> FastAPI:
 
     application.add_middleware(
         CORSMiddleware,
-        allow_origins=["http://localhost", "https://localhost", "http://localhost:*", "https://localhost:*"],
-        allow_credentials=True,
+        allow_origins=["*"],
         allow_methods=["*"],
         allow_headers=["*"],
+        allow_credentials=True,
     )
 
     # Setup routers
