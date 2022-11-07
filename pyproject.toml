@@ -68,6 +68,9 @@ Werkzeug = "*"
 # https://github.com/Teemu/pytest-sugar/issues/241
 py = "*"
 
+# https://github.com/django/channels/issues/1942
+daphne = "*"
+
 [tool.black]
 target-version = ["py310"]
 line-length = 120
