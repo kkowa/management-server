@@ -65,9 +65,6 @@ types-protobuf = "*"
 watchgod = "*"
 Werkzeug = "*"
 
-# https://github.com/Teemu/pytest-sugar/issues/241
-py = "*"
-
 # https://github.com/django/channels/issues/1942
 daphne = "*"
 
