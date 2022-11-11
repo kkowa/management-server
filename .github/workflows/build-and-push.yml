@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - update-ci # TODO: For testing; remove it before merge
     tags:
       - v*
     paths-ignore:
