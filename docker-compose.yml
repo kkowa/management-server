@@ -2,7 +2,7 @@ version: "3"
 
 volumes:
   pyvenv: {}
-  postgresql-data: {}
+  postgres-data: {}
 
 services:
   app:
@@ -13,7 +13,7 @@ services:
       dockerfile: ./Dockerfile
       target: development
     depends_on:
-      - postgresql
+      - postgres
       - mailhog
       - redis
       - rabbitmq
@@ -23,7 +23,7 @@ services:
     environment:
       USE_DOCKER: "yes"
       IPYTHONDIR: "/var/app/.ipython"
-      DATABASE_URL: "postgres://user:password@postgresql:5432/db"
+      DATABASE_URL: "postgres://user:password@postgres:5432/db"
       CACHE_URL: "redis://redis:6379/0"
       MESSAGE_BROKER_URL: "amqp://user:password@rabbitmq:5672/vhost"
       FLOWER_USER: "user"
@@ -33,10 +33,10 @@ services:
     command: poetry run uvicorn config.asgi:application --host 0.0.0.0 --port 8000
 
   # checkov:skip=CKV_SECRET_4:Seems false-positive warning, and compose used only for local development
-  postgresql:
+  postgres:
     image: postgres:13-alpine
     volumes:
-      - postgresql-data:/var/lib/postgresql/data:Z
+      - postgres-data:/var/lib/postgres/data:Z
     environment:
       POSTGRES_DB: "db"
       POSTGRES_USER: "user"

@@ -19,13 +19,104 @@ on:
       - "**.md"
 
 jobs:
-  build-test-push:
+  lint-and-test:
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:13-alpine
+        env:
+          POSTGRES_DB: "db"
+          POSTGRES_USER: "user"
+          POSTGRES_PASSWORD: "password"
+        ports:
+          - "5432:5432"
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+      redis:
+        image: redis:5.0
+        ports:
+          - "6379:6379"
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+      rabbitmq:
+        image: rabbitmq:3.9.12-management
+        env:
+          RABBITMQ_DEFAULT_USER: user
+          RABBITMQ_DEFAULT_PASS: password
+          RABBITMQ_DEFAULT_VHOST: vhost
+        ports:
+          - "5672:5672"
+          - "15672:15672" # web admin
+
+    env:
+      DATABASE_URL: "postgres://user:password@localhost:5432/db"
+      CACHE_URL: "redis://localhost:6379/0"
+      MESSAGE_BROKER_URL: "amqp://user:password@localhost:5672/vhost"
+
     steps:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Docker meta
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.11
+
+      - name: Set up Poetry
+        uses: snok/install-poetry@v1
+        with:
+          version: latest
+
+      - name: Utilize caches
+        id: venv-cache
+        uses: actions/cache@v3
+        with:
+          path: .venv
+          key: ${{ runner.os }}-venv-${{ hashFiles('**/poetry.lock') }}
+
+      - name: Install deps
+        if: steps.venv-cache.outputs.cache-hit != 'true'
+        run: poetry install --no-interaction --no-root
+
+      - name: Check code formatting
+        run: |
+          poetry run black --check .
+          poetry run isort --diff .
+
+      - name: Lint code
+        run: |
+          poetry run flake8
+          poetry run pydocstyle
+          poetry run mypy --show-error-codes --pretty .
+
+      - name: Run tests
+        run: |
+          poetry run pytest
+
+      - name: Upload coverage report
+        uses: codecov/codecov-action@v3
+        with:
+          fail_ci_if_error: true
+          files: coverage.xml
+          flags: unittests
+          verbose: true
+
+  build-docker:
+    runs-on: ubuntu-latest
+    needs: lint-and-test
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Prepare Docker image metadata
         id: meta
         uses: docker/metadata-action@v4
         with:
@@ -51,20 +142,8 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Prepare images
-        uses: docker/bake-action@v2
-        with:
-          targets: app
-          set: |
-            *.cache-from=type=gha
-            *.cache-to=type=gha
-          load: true
-          push: false
-
-      - name: Run checks
-        run: docker compose run -it --rm --user root app -- make ci
-
       - name: Build app image
+        id: build
         uses: docker/build-push-action@v3
         with:
           context: .
@@ -73,4 +152,18 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
-          push: ${{ github.event_name != 'pull_request' }}
+          load: true
+
+      - name: Set up container-structure-test
+        run: |
+          sudo curl -fsSL -o /usr/bin/container-structure-test https://storage.googleapis.com/container-structure-test/latest/container-structure-test-linux-amd64
+          sudo chmod +x /usr/bin/container-structure-test
+
+      - name: Test container structure
+        run: |
+          container-structure-test test --image "${{ steps.build.outputs.imageid }}" --config container-structure-test.yaml
+
+      - name: Push images
+        if: ${{ github.event_name != 'pull_request' }}
+        run: |
+          docker image push --all-tags "ghcr.io/${{ github.repository }}"
