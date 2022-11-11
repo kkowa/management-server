@@ -16,7 +16,7 @@ fileExistenceTests:
 fileContentTests: []
 
 metadataTest:
-  env:
+  envVars:
     - key: "PYTHONPATH"
       value: "^(.*:)?/var/app/idl/grpc(:.*)?$"
       isRegex: true
