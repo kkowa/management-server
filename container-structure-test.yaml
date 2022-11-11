@@ -18,7 +18,7 @@ fileContentTests: []
 metadataTest:
   envVars:
     - key: "PYTHONPATH"
-      value: "^(.*:)?/var/app/idl/grpc(:.*)?$"
+      value: "^(.*:)?/var/app/_generated/grpc(:.*)?$"
       isRegex: true
 
   exposedPorts: ["8000"]
