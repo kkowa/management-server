@@ -1,8 +1,8 @@
 [tool.poetry]
-name = "kkowa-server"
+name = "kkowa-management-server"
 version = "0.1.0"
 description = "Core application server component of kkowa."
-authors = []
+authors = ["Yuchan Lee <lasuillard@gmail.com>"]
 classifiers = ["Private :: Do not Upload"]
 
 [tool.poetry.dependencies]

@@ -7,7 +7,7 @@ volumes:
 services:
   app:
     &django
-    image: localhost:5000/kkowa/server:local
+    image: localhost:5000/kkowa/management-server:local
     build:
       context: .
       dockerfile: ./Dockerfile

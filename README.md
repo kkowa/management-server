@@ -1,4 +1,4 @@
-# kkowa/server
+# management-server
 
 Core application server component of kkowa. Currently this project has no name.
 

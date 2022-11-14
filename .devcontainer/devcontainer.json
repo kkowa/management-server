@@ -1,5 +1,5 @@
 {
-  "name": "kkowa/server",
+  "name": "kkowa/management-server",
   "dockerComposeFile": [
     "../docker-compose.yml",
     "./override.yml"
