@@ -1,6 +1,6 @@
 # management-server
 
-Core application server component of kkowa. Currently this project has no name.
+Management server component of kkowa.
 
 ## 🧰 Tech Stack
 
