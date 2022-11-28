@@ -1830,7 +1830,7 @@ sanic = ["sanic (>=20.12.2,<22.0.0)"]
 
 [[package]]
 name = "strawberry-graphql-django"
-version = "0.7.1"
+version = "0.8.2"
 description = "Strawberry GraphQL Django extension"
 category = "main"
 optional = false
@@ -1838,7 +1838,7 @@ python-versions = ">=3.7,<4.0"
 
 [package.dependencies]
 Django = ">=3.0"
-strawberry-graphql = ">=0.109.0"
+strawberry-graphql = ">=0.139.0"
 
 [[package]]
 name = "termcolor"
@@ -2148,7 +2148,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 
 [metadata]
 lock-version = "1.1"
-python-versions = "^3.11"
+python-versions = "~3.11"
 content-hash = "592c1c82b618afbe0af05e1a0bdf5ecfd4515a7f11f1f9ba9005c4e55cd5d2c1"
 
 [metadata.files]
@@ -2410,6 +2410,7 @@ coverage = [
 cryptography = [
     {file = "cryptography-38.0.3-cp36-abi3-macosx_10_10_universal2.whl", hash = "sha256:984fe150f350a3c91e84de405fe49e688aa6092b3525f407a18b9646f6612320"},
     {file = "cryptography-38.0.3-cp36-abi3-macosx_10_10_x86_64.whl", hash = "sha256:ed7b00096790213e09eb11c97cc6e2b757f15f3d2f85833cd2d3ec3fe37c1722"},
+    {file = "cryptography-38.0.3-cp36-abi3-macosx_10_12_universal2.whl", hash = "sha256:726e3a1bfee0e919b278c8f766fdcf1fe30f8e6feea590e3f248d3636b58ffb3"},
     {file = "cryptography-38.0.3-cp36-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.manylinux_2_24_aarch64.whl", hash = "sha256:bbf203f1a814007ce24bd4d51362991d5cb90ba0c177a9c08825f2cc304d871f"},
     {file = "cryptography-38.0.3-cp36-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:554bec92ee7d1e9d10ded2f7e92a5d70c1f74ba9524947c0ba0c850c7b011828"},
     {file = "cryptography-38.0.3-cp36-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:b1b52c9e5f8aa2b802d48bd693190341fae201ea51c7a167d69fc48b60e8a959"},
@@ -3074,6 +3075,8 @@ psycopg2-binary = [
     {file = "psycopg2_binary-2.9.5-cp311-cp311-musllinux_1_1_i686.whl", hash = "sha256:e67b3c26e9b6d37b370c83aa790bbc121775c57bfb096c2e77eacca25fd0233b"},
     {file = "psycopg2_binary-2.9.5-cp311-cp311-musllinux_1_1_ppc64le.whl", hash = "sha256:5fc447058d083b8c6ac076fc26b446d44f0145308465d745fba93a28c14c9e32"},
     {file = "psycopg2_binary-2.9.5-cp311-cp311-musllinux_1_1_x86_64.whl", hash = "sha256:d892bfa1d023c3781a3cab8dd5af76b626c483484d782e8bd047c180db590e4c"},
+    {file = "psycopg2_binary-2.9.5-cp311-cp311-win32.whl", hash = "sha256:2abccab84d057723d2ca8f99ff7b619285d40da6814d50366f61f0fc385c3903"},
+    {file = "psycopg2_binary-2.9.5-cp311-cp311-win_amd64.whl", hash = "sha256:bef7e3f9dc6f0c13afdd671008534be5744e0e682fb851584c8c3a025ec09720"},
     {file = "psycopg2_binary-2.9.5-cp36-cp36m-macosx_10_14_x86_64.macosx_10_9_intel.macosx_10_9_x86_64.macosx_10_10_intel.macosx_10_10_x86_64.whl", hash = "sha256:6e63814ec71db9bdb42905c925639f319c80e7909fb76c3b84edc79dadef8d60"},
     {file = "psycopg2_binary-2.9.5-cp36-cp36m-manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:212757ffcecb3e1a5338d4e6761bf9c04f750e7d027117e74aa3cd8a75bb6fbd"},
     {file = "psycopg2_binary-2.9.5-cp36-cp36m-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:6f8a9bcab7b6db2e3dbf65b214dfc795b4c6b3bb3af922901b6a67f7cb47d5f8"},
@@ -3353,8 +3356,8 @@ strawberry-graphql = [
     {file = "strawberry_graphql-0.140.0.tar.gz", hash = "sha256:d2477b9cd5ba0a849ad5ea55469cee980024805a21d8bbfff918c29bc76a76b6"},
 ]
 strawberry-graphql-django = [
-    {file = "strawberry_graphql_django-0.7.1-py3-none-any.whl", hash = "sha256:0affd3ddcf4e64c4297ebc38315a7eb13ec005f19c409912bbf29c582e22a4de"},
-    {file = "strawberry_graphql_django-0.7.1.tar.gz", hash = "sha256:a80621421d6fa997758f43e04945c41d56def4c63e77bf68908a11b5b4d590a4"},
+    {file = "strawberry_graphql_django-0.8.2-py3-none-any.whl", hash = "sha256:cc0717bd12b4b60af043cac4a7108c0ae4625c72a45dee99bd99e8952698a4c1"},
+    {file = "strawberry_graphql_django-0.8.2.tar.gz", hash = "sha256:c9ce9de5d3d7a2eacf01ed312d147390fde00a6646a64e2f32896003431ca205"},
 ]
 termcolor = [
     {file = "termcolor-2.1.0-py3-none-any.whl", hash = "sha256:91dd04fdf661b89d7169cefd35f609b19ca931eb033687eaa647cef1ff177c49"},
@@ -3658,7 +3661,6 @@ zope-interface = [
     {file = "zope.interface-5.5.1-cp310-cp310-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_12_x86_64.manylinux2010_x86_64.whl", hash = "sha256:a6f51ffbdcf865f140f55c484001415505f5e68eb0a9eab1d37d0743b503b423"},
     {file = "zope.interface-5.5.1-cp310-cp310-win32.whl", hash = "sha256:8de7bde839d72d96e0c92e8d1fdb4862e89b8fc52514d14b101ca317d9bcf87c"},
     {file = "zope.interface-5.5.1-cp310-cp310-win_amd64.whl", hash = "sha256:90f611d4cdf82fb28837fe15c3940255755572a4edf4c72e2306dbce7dcb3092"},
-    {file = "zope.interface-5.5.1-cp311-cp311-macosx_10_9_universal2.whl", hash = "sha256:d2f2ec42fbc21e1af5f129ec295e29fee6f93563e6388656975caebc5f851561"},
     {file = "zope.interface-5.5.1-cp311-cp311-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:489c4c46fcbd9364f60ff0dcb93ec9026eca64b2f43dc3b05d0724092f205e27"},
     {file = "zope.interface-5.5.1-cp311-cp311-win32.whl", hash = "sha256:9ad58724fabb429d1ebb6f334361f0a3b35f96be0e74bfca6f7de8530688b2df"},
     {file = "zope.interface-5.5.1-cp311-cp311-win_amd64.whl", hash = "sha256:a69f6d8b639f2317ba54278b64fef51d8250ad2c87acac1408b9cc461e4d6bb6"},
