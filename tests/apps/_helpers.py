@@ -1,4 +1,4 @@
-from typing import Any, Generic, Type, TYPE_CHECKING, TypeVar
+from typing import Any, Generic, TYPE_CHECKING, TypeVar
 
 from django.db import models
 from django.db.models import Model
@@ -38,8 +38,8 @@ class ModelFactory(DjangoModelFactory, Generic[_T]):
 class ModelTestBase:
     """Base test template for models."""
 
-    model_cls: Type[Model]
-    factory_cls: Type[ModelFactory]
+    model_cls: type[Model]
+    factory_cls: type[ModelFactory]
 
     # ======================================================================
     # Basic tests
@@ -53,8 +53,8 @@ class ModelTestBase:
 class ModelAdminTestBase:
     """Base test template for admins."""
 
-    model_cls: Type[Model]
-    factory_cls: Type[ModelFactory]
+    model_cls: type[Model]
+    factory_cls: type[ModelFactory]
 
     # ======================================================================
     # Helper methods

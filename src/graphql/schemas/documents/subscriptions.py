@@ -1,8 +1,9 @@
 from __future__ import annotations
 
 import asyncio
+from collections.abc import AsyncGenerator, Iterable
 from itertools import groupby
-from typing import Any, AsyncGenerator, Iterable
+from typing import Any
 
 from django.db.models.signals import post_save
 from django.dispatch import receiver

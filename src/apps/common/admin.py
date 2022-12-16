@@ -1,4 +1,4 @@
-from typing import Any, Type
+from typing import Any
 
 from django import forms
 from django.contrib import admin
@@ -21,7 +21,7 @@ class ModelAdmin(admin.ModelAdmin):
 
         return DEFAULT_HELP_TEXTS | self.help_texts  # type: ignore[return-value]
 
-    def get_form(self, *args: Any, **kwargs: Any) -> Type[forms.ModelForm]:
+    def get_form(self, *args: Any, **kwargs: Any) -> type[forms.ModelForm]:
         """Apply extra features on admin forms."""
         form = super().get_form(*args, **kwargs)
 

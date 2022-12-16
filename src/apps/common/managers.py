@@ -1,4 +1,5 @@
-from typing import Iterable, Sequence, Type, TypeVar
+from collections.abc import Iterable, Sequence
+from typing import TypeVar
 
 from django.db import models
 
@@ -23,7 +24,7 @@ class Manager(models.Manager[_T]):
     async ORM support.
     """
 
-    model: Type[_T]
+    model: type[_T]
 
     def get_queryset(self) -> QuerySet[_T]:
         return QuerySet(self.model, using=self._db)

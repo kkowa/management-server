@@ -1,7 +1,8 @@
 from __future__ import annotations
 
 import secrets
-from typing import Iterable, TYPE_CHECKING
+from collections.abc import Iterable
+from typing import TYPE_CHECKING
 
 from django.conf import settings
 from django.db import models

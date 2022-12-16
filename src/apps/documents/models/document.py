@@ -21,20 +21,18 @@ class DocumentManager(Manager["Document"]):
             folders = list(Folder.objects.filter(owner=owner, name__in=folder_names))
 
             # List folders not exist
-            folders_to_create = folder_names - set(folder.name for folder in folders)
+            folders_to_create = folder_names - {folder.name for folder in folders}
 
             # Create folders does not exists
             # NOTE: Do not use `ignore_conflicts=True` as it does not return PK of created instances
             if folders_to_create:
                 folders.extend(
                     Folder.objects.bulk_create(
-                        (
-                            Folder(
-                                owner=owner,
-                                name=name,
-                            )
-                            for name in folders_to_create
+                        Folder(
+                            owner=owner,
+                            name=name,
                         )
+                        for name in folders_to_create
                     )
                 )
 
@@ -45,17 +43,15 @@ class DocumentManager(Manager["Document"]):
 
             # Create bulk of documents
             documents = Document.objects.bulk_create(
-                (
-                    Document(
-                        **(
-                            document.dict()
-                            | {
-                                "folder": folders_map[document.folder],
-                            }
-                        )
+                Document(
+                    **(
+                        document.dict()
+                        | {
+                            "folder": folders_map[document.folder],
+                        }
                     )
-                    for document in input
                 )
+                for document in input
             )
 
         return documents

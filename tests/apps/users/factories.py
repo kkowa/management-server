@@ -1,5 +1,6 @@
+from collections.abc import Sequence
 from datetime import timedelta
-from typing import Any, Sequence
+from typing import Any
 
 from django.utils import timezone
 

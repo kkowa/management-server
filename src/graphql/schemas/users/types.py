@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from typing import TYPE_CHECKING
 
 from strawberry import auto, LazyType
@@ -23,5 +21,7 @@ class User(relay.Node):
     last_modified: auto
 
     folders: relay.Connection[  # type: ignore[type-var, name-defined]
-        LazyType["Folder", "src.graphql.schemas.documents.types"]  # noqa: F821
+        LazyType[
+            "Folder", src.graphql.schemas.documents.types  # pyright: ignore[reportUndefinedVariable]  # noqa: F821
+        ]
     ] = gql.django.connection()

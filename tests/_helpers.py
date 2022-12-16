@@ -1,5 +1,3 @@
-from typing import Type
-
 from factory import Factory
 
 from src.common.datamodels import DataModel
@@ -8,8 +6,8 @@ from src.common.datamodels import DataModel
 class DataModelTestBase:
     """Base test template for models."""
 
-    datamodel_cls: Type[DataModel]
-    factory_cls: Type[Factory]
+    datamodel_cls: type[DataModel]
+    factory_cls: type[Factory]
 
     # ======================================================================
     # Basic tests
