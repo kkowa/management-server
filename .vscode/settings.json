@@ -29,7 +29,9 @@
   "python.poetryPath": "poetry",
   "python.formatting.provider": "black",
   "python.formatting.blackPath": "${workspaceFolder}/.venv/bin/black",
-  "python.sortImports.path": "${workspaceFolder}/.venv/bin/isort",
+  "isort.path": [
+    "${workspaceFolder}/.venv/bin/isort"
+  ],
   "yaml.format.enable": true,
   "[helm]": {
     "editor.formatOnSave": false,
