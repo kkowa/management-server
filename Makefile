@@ -50,11 +50,13 @@ generate:  ## Generate codes from schemas
 
 format:  ## Run autoformatters
 	poetry run black .
+	poetry run pycln .
 	poetry run isort .
 .PHONY: format
 
 lint:  ## Run all linters
 	poetry run black --check .
+	poetry run pycln --check .
 	poetry run isort --diff .
 	poetry run flake8
 	poetry run pydocstyle

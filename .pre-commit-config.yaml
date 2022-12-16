@@ -13,6 +13,7 @@ repos:
       - id: trailing-whitespace
       - id: end-of-file-fixer
 
+  # Prerequisites checkers
   - repo: local
     hooks:
       - id: generate
@@ -30,6 +31,7 @@ repos:
         entry: poetry run python manage.py makemigrations
         args: [--check, --dry-run]
 
+  # Formatters
   - repo: local
     hooks:
       - id: black
@@ -38,12 +40,21 @@ repos:
         types: [python]
         entry: poetry run black
 
+      - id: pycln
+        name: Remove unused imports with pycln
+        language: system
+        types: [python]
+        entry: poetry run pycln
+
       - id: isort
         name: Format with isort
         language: system
         types: [python]
         entry: poetry run isort
 
+  # Linters
+  - repo: local
+    hooks:
       - id: flake8
         name: Lint with Flake8
         language: system
@@ -70,6 +81,7 @@ repos:
         pass_filenames: false
         entry: poetry run pytest
 
+  # Post processors
   - repo: local
     hooks:
       - id: schema-export
