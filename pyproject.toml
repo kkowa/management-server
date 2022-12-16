@@ -21,7 +21,7 @@ django-filter = "^22"
 django-health-check = "^3"
 django-model-utils = "^4"
 django-redis = "^5"
-fastapi = "^0"
+fastapi = { version = "^0", extras = ["all"] }
 flower = "^1"
 grpcio = "^1"
 grpcio-tools = "^1"
@@ -38,7 +38,7 @@ strawberry-graphql-django = "^0"
 uvicorn = { version = "^0", extras = ["standard"] }
 whitenoise = "^6"
 
-[tool.poetry.dev-dependencies]
+[tool.poetry.group.dev.dependencies]
 black = "*"
 coverage = "*"
 django-coverage-plugin = "*"
@@ -63,7 +63,6 @@ pytest-timeout = "*"
 pytest-xdist = { version = "*", extras = ["psutil"] }
 types-protobuf = "*"
 watchgod = "*"
-Werkzeug = "*"
 
 # https://github.com/django/channels/issues/1942
 daphne = "*"

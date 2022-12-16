@@ -21,8 +21,12 @@ def admin_client(admin_user: User) -> TestClient:
     token = TokenFactory(owner=admin_user)
 
     client = TestClient(application)
-    client.headers = {
-        "Authorization": f"Bearer {token.key}",
-    }
+    setattr(
+        client,
+        "headers",
+        {
+            "Authorization": f"Bearer {token.key}",
+        },
+    )
 
     return client

@@ -20,7 +20,7 @@ class FolderAdmin(ModelAdmin):
 
     # Detail view
     # -----------------------------------------------------------------------------------------------------------------
-    fieldsets = (  # type: ignore[assignment]
+    fieldsets = (
         (
             None,
             {"fields": ("id", "owner", "name", "count")},
@@ -52,7 +52,7 @@ class DocumentAdmin(ModelAdmin):
 
     # Detail view
     # -----------------------------------------------------------------------------------------------------------------
-    fieldsets = (  # type: ignore[assignment]
+    fieldsets = (
         (
             None,
             {"fields": ("id", "folder", "type")},
