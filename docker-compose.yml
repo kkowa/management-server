@@ -18,7 +18,7 @@ services:
       - redis
       - rabbitmq
     volumes:
-      - .:/var/app:z
+      - .:/var/app
       - pyvenv:/var/app/.venv
     environment:
       USE_DOCKER: "yes"
@@ -36,18 +36,18 @@ services:
   postgres:
     image: postgres:13-alpine
     volumes:
-      - postgres-data:/var/lib/postgres/data:Z
+      - postgres-data:/var/lib/postgres/data
     environment:
       POSTGRES_DB: "db"
       POSTGRES_USER: "user"
       POSTGRES_PASSWORD: "password"
     ports:
-      - "5432:5432"
+      - 5432:5432
 
   redis:
     image: redis:5.0
     ports:
-      - "6379:6379"
+      - 6379:6379
 
   rabbitmq:
     image: rabbitmq:3.9.12-management
@@ -56,13 +56,13 @@ services:
       RABBITMQ_DEFAULT_PASS: password
       RABBITMQ_DEFAULT_VHOST: vhost
     ports:
-      - "5672:5672"
-      - "15672:15672" # web admin
+      - 5672:5672
+      - 15672:15672 # web admin
 
   mailhog:
     image: mailhog/mailhog:v1.0.0
     ports:
-      - "1025:1025"
+      - 1025:1025
 
   # ==========================================================================
   # Celery
@@ -102,7 +102,7 @@ services:
     depends_on:
       - app
     ports:
-      - "5555:5555"
+      - 5555:5555
     command: start-flower.sh
     healthcheck:
       test: curl -fsSL --user "$${FLOWER_USER}:$${FLOWER_PASSWORD}" 'http://localhost:5555/metrics'
