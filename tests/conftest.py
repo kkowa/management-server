@@ -3,19 +3,17 @@ import json
 from collections.abc import Generator
 from enum import Enum
 from pathlib import Path
-from typing import Any, TYPE_CHECKING
+from typing import Any
 
 from django.conf import LazySettings
 
 import py
 import pytest
+from _pytest.config import Config
+from _pytest.fixtures import SubRequest
+from _pytest.mark.structures import Mark
+from _pytest.python import Function
 from pytest_socket import disable_socket
-
-if TYPE_CHECKING:
-    from _pytest.config import Config
-    from _pytest.fixtures import SubRequest
-    from _pytest.mark.structures import Mark
-    from _pytest.python import Function
 
 # =============================================================================
 # Global test configurations
