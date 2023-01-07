@@ -1,6 +1,6 @@
 # management-server
 
-[![Build and Push](https://github.com/kkowa/management-server/actions/workflows/build-and-push.yml/badge.svg)](https://github.com/kkowa/management-server/actions/workflows/build-and-push.yml)
+[![CI](https://github.com/kkowa/management-server/actions/workflows/ci.yml/badge.svg)](https://github.com/kkowa/management-server/actions/workflows/ci.yml)
 [![codecov](https://codecov.io/gh/kkowa/management-server/branch/main/graph/badge.svg?token=JKABZOVQ9L)](https://codecov.io/gh/kkowa/management-server)
 
 Management server component of kkowa.
