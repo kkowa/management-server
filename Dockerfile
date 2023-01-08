@@ -99,7 +99,10 @@ RUN apt update && apt install --no-install-recommends -y \
 COPY --from=build --chown=worker:worker "${APP_HOME}/.venv" "${APP_HOME}/.venv"
 
 # Copy script files to executable path
-COPY --chown=worker:worker --chmod=755 ./scripts/* /usr/local/bin/
+COPY --chown=worker:worker --chmod=755 \
+    ./scripts/docker-entrypoint.sh ./scripts/start-celery-beat.sh \
+    ./scripts/start-celery-worker.sh ./scripts/start-flower.sh ./scripts/start.sh \
+    /usr/local/bin/
 
 # Copy source codes
 COPY --chown=worker:worker . .
@@ -115,7 +118,10 @@ FROM base AS production
 COPY --from=build-minimal --chown=worker:worker "${APP_HOME}/.venv" "${APP_HOME}/.venv"
 
 # Copy script files to executable path
-COPY --chown=worker:worker --chmod=755 ./scripts/* /usr/local/bin/
+COPY --chown=worker:worker --chmod=755 \
+    ./scripts/docker-entrypoint.sh ./scripts/start-celery-beat.sh \
+    ./scripts/start-celery-worker.sh ./scripts/start-flower.sh ./scripts/start.sh \
+    /usr/local/bin/
 
 # Copy source codes
 COPY --chown=worker:worker . .
