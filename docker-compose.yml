@@ -31,6 +31,7 @@ services:
     ports:
       - 8000:8000
     command: poetry run uvicorn config.asgi:application --host 0.0.0.0 --port 8000
+    init: true
 
   # checkov:skip=CKV_SECRET_4:Seems false-positive warning, and compose used only for local development
   postgres:
@@ -79,7 +80,6 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-
     restart: on-failure:5
 
   celery-beat:
@@ -94,7 +94,6 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-
     restart: on-failure:5
 
   flower:
@@ -110,5 +109,4 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-
     restart: on-failure:5
