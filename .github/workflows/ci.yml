@@ -3,7 +3,7 @@ name: CI
 on:
   push:
     branches:
-      - docker-compose-ci # TODO: Change to main before PR merge
+      - main
     tags:
       - v*
     paths-ignore:
