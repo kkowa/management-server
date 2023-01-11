@@ -49,17 +49,17 @@ generate:  ## Generate codes from schemas
 .PHONY: generate
 
 format:  ## Run autoformatters
-	poetry run black .
-	poetry run pycln .
-	poetry run isort .
+	poetry run black --verbose .
+	poetry run pycln --verbose .
+	poetry run isort --verbose .
 .PHONY: format
 
 lint:  ## Run all linters
-	poetry run black --check .
-	poetry run pycln --check .
-	poetry run isort --diff .
-	poetry run flake8
-	poetry run pydocstyle
+	poetry run black --verbose --check .
+	poetry run pycln --verbose --check .
+	poetry run isort --verbose --diff .
+	poetry run flake8 --verbose
+	poetry run pydocstyle --verbose
 	poetry run mypy --show-error-codes --pretty .
 .PHONY: lint
 
@@ -71,7 +71,7 @@ scan:  ## Run all scans
 
 .PHONY: scan
 
-# TODO: Move generation codes to config/{api,graphql}.py, to generate when execute them directly (__main__)
+# TODO: Define OpenAPI schema generation codes as Django management command (e.g. `export_openapi_schema`) to run them easily
 schema-export:  ## Export service schemas
 	poetry run python manage.py shell -c 'exec("""\nimport json\nfrom config.api import get_api_application\nwith open("idl/openapi/schemas/server.openapi.json", mode="wt", encoding="utf-8") as f:\n    json.dump(get_api_application().openapi_schema, f)\n""")'
 	poetry run python manage.py export_schema config.graphql:schema --path idl/graphql/schemas/server.graphql
