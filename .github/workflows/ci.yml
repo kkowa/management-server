@@ -3,7 +3,7 @@ name: CI
 on:
   push:
     branches:
-      - main
+      - docker-compose-ci # TODO: Change to main before PR merge
     tags:
       - v*
     paths-ignore:
@@ -21,85 +21,28 @@ on:
 jobs:
   lint-and-test:
     runs-on: ubuntu-latest
-    services:
-      postgres:
-        image: postgres:13-alpine
-        env:
-          POSTGRES_DB: "db"
-          POSTGRES_USER: "user"
-          POSTGRES_PASSWORD: "password"
-        ports:
-          - "5432:5432"
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-
-      redis:
-        image: redis:5.0
-        ports:
-          - "6379:6379"
-        options: >-
-          --health-cmd "redis-cli ping"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-
-      rabbitmq:
-        image: rabbitmq:3.9.12-management
-        env:
-          RABBITMQ_DEFAULT_USER: user
-          RABBITMQ_DEFAULT_PASS: password
-          RABBITMQ_DEFAULT_VHOST: vhost
-        ports:
-          - "5672:5672"
-          - "15672:15672" # web admin
-
-    env:
-      DATABASE_URL: "postgres://user:password@localhost:5432/db"
-      CACHE_URL: "redis://localhost:6379/0"
-      MESSAGE_BROKER_URL: "amqp://user:password@localhost:5672/vhost"
-
     steps:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Prepare images
+        uses: docker/bake-action@v2
         with:
-          python-version: 3.11
+          targets: workspace
+          set: |
+            *.cache-from=type=gha
+            *.cache-to=type=gha,mode=max
+          load: true
+          push: false
 
-      - name: Set up Poetry
-        uses: snok/install-poetry@v1
-        with:
-          version: latest
-
-      - name: Utilize caches
-        id: venv-cache
-        uses: actions/cache@v3
-        with:
-          path: .venv
-          key: ${{ runner.os }}-venv-${{ hashFiles('**/poetry.lock') }}
-
-      - name: Install deps
-        if: steps.venv-cache.outputs.cache-hit != 'true'
-        run: poetry install --no-interaction --no-root
-
-      - name: Check code formatting
-        run: |
-          poetry run black --check .
-          poetry run isort --diff .
-
-      - name: Lint code
-        run: |
-          poetry run flake8
-          poetry run pydocstyle
-          poetry run mypy --show-error-codes --pretty .
-
-      - name: Run tests
-        run: |
-          poetry run pytest
+      - name: Run checks
+        run: docker compose run -it --rm --user root app -- make ci
 
       - name: Upload coverage report
         uses: codecov/codecov-action@v3
@@ -108,13 +51,6 @@ jobs:
           files: coverage.xml
           flags: unittests
           verbose: true
-
-  build-docker:
-    runs-on: ubuntu-latest
-    needs: lint-and-test
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
 
       - name: Prepare Docker image metadata
         id: meta
@@ -128,12 +64,6 @@ jobs:
             type=semver,pattern={{major}}
             type=semver,pattern={{major}}.{{minor}}
             type=semver,pattern={{major}}.{{minor}}.{{patch}}
-
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v2
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v2
