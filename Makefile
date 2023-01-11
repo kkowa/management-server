@@ -60,11 +60,11 @@ lint:  ## Run all linters
 	poetry run isort --verbose --diff .
 	poetry run flake8 --verbose
 	poetry run pydocstyle --verbose
-	poetry run mypy --verbose --show-error-codes --pretty .
+	poetry run mypy --show-error-codes --pretty .
 .PHONY: lint
 
 test:  ## Run tests
-	poetry run pytest --verbose
+	poetry run pytest
 .PHONY: test
 
 scan:  ## Run all scans
