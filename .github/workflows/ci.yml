@@ -34,7 +34,7 @@ jobs:
       - name: Prepare images
         uses: docker/bake-action@v2
         with:
-          targets: workspace
+          targets: app
           set: |
             *.cache-from=type=gha
             *.cache-to=type=gha,mode=max
